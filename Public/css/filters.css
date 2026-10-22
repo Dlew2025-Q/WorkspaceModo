@@ -1,0 +1,378 @@
+/* ==========================================================================
+   Workspacemodo — Multi-Faceted Filter Engine Styles (Step 11)
+   public/css/filters.css
+   ==========================================================================
+   Non-render-blocking: loaded async via media="print" onload pattern.
+   Critical layout rules (grid, aspect-ratio) are inlined in <head> to
+   prevent FOUC and CLS.
+   ========================================================================== */
+
+/* --- Filter Bar Container ------------------------------------------------ */
+.filter-section {
+  max-width: 1200px;
+  margin: 48px auto;
+  padding: 0 20px;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.filter-header h2 {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 700;
+  margin: 12px 0 0;
+  color: #0f172a;
+  line-height: 1.3;
+}
+
+.results-badge {
+  font-size: 13px;
+  color: #94a3b8;
+  background: rgba(15, 23, 42, 0.05);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* --- Control Bar Layout -------------------------------------------------- */
+.filter-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) auto;
+  gap: 16px;
+  align-items: flex-end;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.filter-select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f8fafc;
+  padding: 10px 36px 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.filter-select:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+.select-wrapper::after {
+  content: "▾";
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* --- Active Chips & Reset ------------------------------------------------ */
+.filter-actions {
+  display: flex;
+  align-items: flex-end;
+}
+
+.btn-reset {
+  background: transparent;
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  color: #fb7185;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-reset:hover {
+  background: rgba(244, 63, 94, 0.1);
+  border-color: #f43f5e;
+}
+
+.active-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.chips-label {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.chips-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border-style: solid;
+  transition: background 0.15s ease;
+}
+
+.chip-pill:hover {
+  background: rgba(56, 189, 248, 0.25);
+}
+
+/* --- Setups Grid & Card Layout ------------------------------------------- */
+.setups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+  min-height: 400px;
+}
+
+.setup-card {
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  animation: cardFadeIn 0.3s ease-out;
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.setup-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.card-thumb-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #1e293b;
+}
+
+.card-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-thumb-wrap.is-loading {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.card-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-badges {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.badge-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+}
+
+.badge-tag.badge-budget {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+}
+
+.setup-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+.gear-list {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0 0 16px 0;
+  line-height: 1.6;
+}
+
+.gear-list strong {
+  color: #cbd5e1;
+}
+
+.setup-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.setup-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  background: #38bdf8;
+  color: #0f172a;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.card-cta:hover {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+/* --- Empty State Card ---------------------------------------------------- */
+.empty-state-card {
+  text-align: center;
+  padding: 60px 20px;
+  background: #0f172a;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  margin-top: 24px;
+}
+
+.empty-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.empty-state-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0 0 8px 0;
+}
+
+.empty-state-card p {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0 0 20px 0;
+  line-height: 1.6;
+}
+
+.empty-state-card .btn-primary {
+  display: inline-block;
+  background: #38bdf8;
+  color: #0f172a;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.empty-state-card .btn-primary:hover {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+/* --- Responsive ---------------------------------------------------------- */
+@media (max-width: 768px) {
+  .filter-bar { grid-template-columns: 1fr; }
+  .filter-actions { justify-content: center; }
+  .setups-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .filter-header { flex-direction: column; align-items: flex-start; }
+}
+
+/* --- Reduced Motion ------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .setup-card, .card-thumb-wrap.is-loading { animation: none; }
+  .setup-card { transition: none; }
+}

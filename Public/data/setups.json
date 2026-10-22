@@ -1,0 +1,85 @@
+[
+  {
+    "id": "setup-minimalist-dev",
+    "title": "The Ultimate Minimalist Developer Workspace 2027",
+    "role": "developer",
+    "budgetTier": "mid",
+    "budgetAmount": 2450,
+    "aesthetic": "warm-wood",
+    "image": {
+      "webp": "/images/setups/minimalist-dev-setup.webp",
+      "fallback": "/images/setups/minimalist-dev-setup.jpg",
+      "width": 800,
+      "height": 500
+    },
+    "gearCount": 6,
+    "featuredGear": ["BenQ ScreenBar Halo", "Keychron Q1 Pro", "Grovemade Walnut Shelf"],
+    "primaryLink": "/go/benq-screenbar?placement=filtered_grid&subid=dev_warmwood",
+    "hotspots": [
+      { "id": "pin-screenbar", "x": 52.4, "y": 19.8, "category": "Lighting", "name": "BenQ ScreenBar Halo LED Monitor Light", "price": "$179.00", "slug": "benq-screenbar", "badge": "Staff Pick" },
+      { "id": "pin-keyboard", "x": 48.0, "y": 68.5, "category": "Keyboards", "name": "Keychron Q1 Pro Wireless Custom Keyboard", "price": "$199.00", "slug": "keychron-q1", "badge": "Hot Deal" },
+      { "id": "pin-shelf", "x": 50.0, "y": 39.2, "category": "Desk Organization", "name": "Grovemade Solid Walnut Desk Shelf Riser", "price": "$240.00", "slug": "walnut-shelf", "badge": "Pillar Item" },
+      { "id": "pin-chair", "x": 18.5, "y": 62.0, "category": "Ergonomics", "name": "Herman Miller Aeron Ergonomic Chair", "price": "$1,275.00", "slug": "herman-miller-aeron", "badge": "Ergo Choice" }
+    ]
+  },
+  {
+    "id": "setup-stealth-designer",
+    "title": "Stealth Matte Black Creative Studio",
+    "role": "designer",
+    "budgetTier": "endgame",
+    "budgetAmount": 4200,
+    "aesthetic": "dark-mode",
+    "image": { "webp": "/images/setups/stealth-designer-setup.webp", "fallback": "/images/setups/stealth-designer-setup.jpg", "width": 800, "height": 500 },
+    "gearCount": 8,
+    "featuredGear": ["Herman Miller Aeron", "CalDigit TS4 Dock", "Studio Display"],
+    "primaryLink": "/go/caldigit-ts4?placement=filtered_grid&subid=designer_stealth"
+  },
+  {
+    "id": "setup-budget-creator",
+    "title": "Clean Creator & Podcasting Corner Under $1k",
+    "role": "creator",
+    "budgetTier": "budget",
+    "budgetAmount": 890,
+    "aesthetic": "minimalist-white",
+    "image": { "webp": "/images/setups/budget-creator-setup.webp", "fallback": "/images/setups/budget-creator-setup.jpg", "width": 800, "height": 500 },
+    "gearCount": 5,
+    "featuredGear": ["Shure MV7 Mic", "Elgato Wave Mic Arm", "Logitech MX Master 3S"],
+    "primaryLink": "/go/shure-mv7?placement=filtered_grid&subid=creator_budget"
+  },
+  {
+    "id": "setup-cyberpunk-gamer",
+    "title": "Cyberpunk RGB Battlestation & Coding Rig",
+    "role": "developer",
+    "budgetTier": "endgame",
+    "budgetAmount": 3800,
+    "aesthetic": "cyberpunk",
+    "image": { "webp": "/images/setups/cyberpunk-gamer-setup.webp", "fallback": "/images/setups/cyberpunk-gamer-setup.jpg", "width": 800, "height": 500 },
+    "gearCount": 9,
+    "featuredGear": ["LG UltraGear 27GP950", "Razer Huntsman V3", "Secretlab TITAN Evo"],
+    "primaryLink": "/go/lg-ultragear-27gp950?placement=filtered_grid&subid=dev_cyberpunk"
+  },
+  {
+    "id": "setup-nordic-minimalist",
+    "title": "Nordic Minimalist Focus Desk Under $1k",
+    "role": "minimalist",
+    "budgetTier": "budget",
+    "budgetAmount": 750,
+    "aesthetic": "warm-wood",
+    "image": { "webp": "/images/setups/nordic-minimalist-setup.webp", "fallback": "/images/setups/nordic-minimalist-setup.jpg", "width": 800, "height": 500 },
+    "gearCount": 4,
+    "featuredGear": ["IKEA BEKANT Desk", "Logitech MX Keys", "BenQ ScreenBar Plus"],
+    "primaryLink": "/go/ikea-bekant?placement=filtered_grid&subid=minimalist_nordic"
+  },
+  {
+    "id": "setup-dark-mode-dev",
+    "title": "Dark Mode Developer Command Center",
+    "role": "developer",
+    "budgetTier": "mid",
+    "budgetAmount": 1850,
+    "aesthetic": "dark-mode",
+    "image": { "webp": "/images/setups/dark-mode-dev-setup.webp", "fallback": "/images/setups/dark-mode-dev-setup.jpg", "width": 800, "height": 500 },
+    "gearCount": 7,
+    "featuredGear": ["LG 32UN880 Ergo Monitor", "Ducky One 3", "Autonomous ErgoChair"],
+    "primaryLink": "/go/lg-32un880?placement=filtered_grid&subid=dev_darkmode"
+  }
+]

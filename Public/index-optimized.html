@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="preconnect" href="https://www.amazon.com" crossorigin>
+  <link rel="preconnect" href="https://grovemade.com" crossorigin>
+
+  <link rel="preload" as="image" href="/images/hero-minimalist-desk.avif" type="image/avif" fetchpriority="high" />
+  <link rel="preload" as="image" href="/images/hero-minimalist-desk.webp" type="image/webp" fetchpriority="high" />
+  <link rel="preload" as="font" href="/fonts/inter-var-latin.woff2" type="font/woff2" crossorigin />
+  <link rel="preload" as="style" href="/css/critical.css" />
+
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--max-w:1200px;--hero-h:675px;--hero-ratio:16/9}
+    html{font-family:'Inter',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+    body{min-height:100vh;line-height:1.6;color:#1a1a1a;background:#fafafa}
+    .hero{position:relative;width:100%;aspect-ratio:var(--hero-ratio);overflow:hidden;background:#e8e8e8}
+    .hero img{width:100%;height:100%;object-fit:cover}
+    .container{max-width:var(--max-w);margin:0 auto;padding:0 1rem}
+    .deal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;min-height:600px}
+    .card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+    .card-img{aspect-ratio:4/3;overflow:hidden;background:#f0f0f0}
+    .card-img img{width:100%;height:100%;object-fit:cover}
+    .hotspot-section{max-width:1200px;margin:40px auto;padding:0 20px}
+    .hotspot-header{text-align:center;margin-bottom:24px}
+    .hotspot-header h2{font-size:clamp(1.25rem,3vw,1.75rem);font-weight:700;margin:12px 0 0;color:#0f172a;line-height:1.3}
+    .pill-badge{display:inline-block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#38bdf8;background:rgba(56,189,248,.12);padding:4px 12px;border-radius:999px}
+    .hotspot-viewport{position:relative;width:100%;aspect-ratio:1400/900;border-radius:16px;overflow:visible;box-shadow:0 20px 40px rgba(0,0,0,.12);background:#0f172a}
+    .hotspot-bg-image{width:100%;height:100%;object-fit:cover;border-radius:16px;display:block}
+    .hotspots-layer{position:absolute;inset:0;pointer-events:none}
+    .filter-section{max-width:1200px;margin:48px auto;padding:0 20px}
+    .filter-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+    .filter-header h2{font-size:clamp(1.25rem,3vw,1.75rem);font-weight:700;margin:12px 0 0;color:#0f172a;line-height:1.3}
+    .results-badge{font-size:13px;color:#94a3b8;background:rgba(15,23,42,.05);border:1px solid rgba(15,23,42,.08);padding:6px 12px;border-radius:999px;font-weight:500;white-space:nowrap}
+    .setups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;margin-top:24px;min-height:400px}
+    .card-thumb-wrap{position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;background:#1e293b}
+    .card-thumb{width:100%;height:100%;object-fit:cover;display:block}
+    .setup-card{background:#0f172a;border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+  </style>
+
+  <link rel="stylesheet" href="/css/main.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="/css/main.css"></noscript>
+  <link rel="stylesheet" href="/css/hotspots.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="/css/hotspots.css"></noscript>
+  <link rel="stylesheet" href="/css/filters.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="/css/filters.css"></noscript>
+
+  <title>Workspacemodo — Curated Desk Setups & Remote Work Gear</title>
+  <meta name="description" content="Curated desk setups, ergonomic gear, and remote work essentials. Handpicked products for the perfect workspace.">
+</head>
+<body>
+
+  <section class="hero">
+    <picture>
+      <source srcset="/images/hero-minimalist-desk.avif" type="image/avif">
+      <source srcset="/images/hero-minimalist-desk.webp" type="image/webp">
+      <img src="/images/hero-minimalist-desk.jpg" alt="Curated Minimalist Desk Setup 2027" width="1200" height="675" fetchpriority="high" decoding="async" class="hero-image" />
+    </picture>
+  </section>
+
+  <section class="hotspot-section" id="workspace-spotlight">
+    <div class="hotspot-header">
+      <span class="pill-badge">Interactive Gear Tour</span>
+      <h2>Click or hover any item to reveal gear specs &amp; deals</h2>
+    </div>
+    <div class="hotspot-viewport" id="hotspot-container">
+      <picture>
+        <source srcset="/images/setups/minimalist-dev-setup.avif" type="image/avif">
+        <source srcset="/images/setups/minimalist-dev-setup.webp" type="image/webp">
+        <img src="/images/setups/minimalist-dev-setup.jpg" alt="The Ultimate Minimalist Developer Workspace 2027" width="1400" height="900" class="hotspot-bg-image" loading="lazy" decoding="async" />
+      </picture>
+      <div class="hotspots-layer" id="hotspots-layer"></div>
+    </div>
+  </section>
+
+  <script>window.SETUP_DATA = {"id":"setup-minimalist-dev","title":"The Ultimate Minimalist Developer Workspace 2027","image":{"webp":"/images/setups/minimalist-dev-setup.webp","fallback":"/images/setups/minimalist-dev-setup.jpg","alt":"Minimalist desk setup with ultrawide monitor, mechanical keyboard, and walnut shelf","width":1400,"height":900},"hotspots":[{"id":"pin-screenbar","x":52.4,"y":19.8,"category":"Lighting","name":"BenQ ScreenBar Halo LED Monitor Light","price":"$179.00","slug":"benq-screenbar","badge":"Staff Pick"},{"id":"pin-keyboard","x":48.0,"y":68.5,"category":"Keyboards","name":"Keychron Q1 Pro Wireless Custom Keyboard","price":"$199.00","slug":"keychron-q1","badge":"Hot Deal"},{"id":"pin-shelf","x":50.0,"y":39.2,"category":"Desk Organization","name":"Grovemade Solid Walnut Desk Shelf Riser","price":"$240.00","slug":"walnut-shelf","badge":"Pillar Item"},{"id":"pin-chair","x":18.5,"y":62.0,"category":"Ergonomics","name":"Herman Miller Aeron Ergonomic Chair","price":"$1,275.00","slug":"herman-miller-aeron","badge":"Ergo Choice"}]};</script>
+
+  <section class="filter-section" id="workspace-catalog">
+    <div class="filter-container">
+      <div class="filter-header">
+        <div>
+          <span class="pill-badge">Browse By Vibe &amp; Budget</span>
+          <h2>Curated Workspace Directory</h2>
+        </div>
+        <div class="filter-metrics">
+          <span id="results-count" class="results-badge" aria-live="polite">Showing all setups</span>
+        </div>
+      </div>
+      <div class="filter-bar" role="toolbar" aria-label="Workspace filters">
+        <div class="filter-group">
+          <label for="filter-role" class="filter-label">Profession</label>
+          <div class="select-wrapper">
+            <select id="filter-role" class="filter-select" aria-label="Filter by profession">
+              <option value="all">All Professions</option>
+              <option value="developer">Developer</option>
+              <option value="designer">Designer</option>
+              <option value="creator">Creator / Streamer</option>
+              <option value="minimalist">Minimalist</option>
+            </select>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label for="filter-budget" class="filter-label">Budget Tier</label>
+          <div class="select-wrapper">
+            <select id="filter-budget" class="filter-select" aria-label="Filter by budget tier">
+              <option value="all">All Budgets</option>
+              <option value="budget">Under $1,000 (Budget)</option>
+              <option value="mid">$1,000 – $3,000 (Mid-Tier)</option>
+              <option value="endgame">$3,000+ (Endgame)</option>
+            </select>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label for="filter-aesthetic" class="filter-label">Aesthetic Vibe</label>
+          <div class="select-wrapper">
+            <select id="filter-aesthetic" class="filter-select" aria-label="Filter by aesthetic vibe">
+              <option value="all">All Aesthetics</option>
+              <option value="warm-wood">Warm Wood / Nordic</option>
+              <option value="dark-mode">Dark Mode / Stealth</option>
+              <option value="minimalist-white">Minimalist White</option>
+              <option value="cyberpunk">Cyberpunk / RGB</option>
+            </select>
+          </div>
+        </div>
+        <div class="filter-actions">
+          <button id="filter-reset-btn" class="btn-reset" type="button" style="display: none;">Clear Filters ✕</button>
+        </div>
+      </div>
+      <div id="active-chips-container" class="active-chips-row" style="display: none;">
+        <span class="chips-label">Active:</span>
+        <div id="chips-list" class="chips-list"></div>
+      </div>
+      <div id="setups-grid" class="setups-grid"></div>
+      <div id="empty-state" class="empty-state-card" style="display: none;">
+        <div class="empty-icon">🔍</div>
+        <h3>No matching setups found</h3>
+        <p>Try clearing one or more filters or explore our most popular developer workspace builds.</p>
+        <button class="btn-primary" id="empty-reset-btn" type="button">Reset All Filters</button>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+    <h1>Top Desk Gear Picks</h1>
+    <div class="deal-grid">
+      <article class="card">
+        <div class="card-img">
+          <picture>
+            <source srcset="/images/benq-screenbar-480.avif 480w, /images/benq-screenbar-800.avif 800w" sizes="(max-width: 600px) 480px, 800px" type="image/avif">
+            <source srcset="/images/benq-screenbar-480.webp 480w, /images/benq-screenbar-800.webp 800w" sizes="(max-width: 600px) 480px, 800px" type="image/webp">
+            <img src="/images/benq-screenbar-800.jpg" alt="BenQ ScreenBar Plus — monitor light bar" width="800" height="600" loading="lazy" decoding="async" />
+          </picture>
+        </div>
+        <div class="card-body">
+          <h2>BenQ ScreenBar Plus</h2>
+          <a href="/go/benq-screenbar?placement=dealgrid&subid=p001&utm_campaign=fall-deals" rel="sponsored noopener noreferrer" data-placement="dealgrid" data-campaign="fall-deals">Check Price on Amazon →</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-img">
+          <picture>
+            <source srcset="/images/keychron-q1-480.avif 480w, /images/keychron-q1-800.avif 800w" sizes="(max-width: 600px) 480px, 800px" type="image/avif">
+            <source srcset="/images/keychron-q1-480.webp 480w, /images/keychron-q1-800.webp 800w" sizes="(max-width: 600px) 480px, 800px" type="image/webp">
+            <img src="/images/keychron-q1-800.jpg" alt="Keychron Q1 custom mechanical keyboard" width="800" height="600" loading="lazy" decoding="async" />
+          </picture>
+        </div>
+        <div class="card-body">
+          <h2>Keychron Q1</h2>
+          <a href="/go/keychron-q1?placement=dealgrid&subid=p002&utm_campaign=fall-deals" rel="sponsored noopener noreferrer" data-placement="dealgrid" data-campaign="fall-deals">Shop Now →</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-img">
+          <picture>
+            <source srcset="/images/walnut-shelf-480.avif 480w, /images/walnut-shelf-800.avif 800w" sizes="(max-width: 600px) 480px, 800px" type="image/avif">
+            <source srcset="/images/walnut-shelf-480.webp 480w, /images/walnut-shelf-800.webp 800w" sizes="(max-width: 600px) 480px, 800px" type="image/webp">
+            <img src="/images/walnut-shelf-800.jpg" alt="Grovemade Walnut Desk Shelf" width="800" height="600" loading="lazy" decoding="async" />
+          </picture>
+        </div>
+        <div class="card-body">
+          <h2>Grovemade Walnut Shelf</h2>
+          <a href="/go/walnut-shelf?placement=dealgrid&subid=p003&utm_campaign=fall-deals" rel="sponsored noopener noreferrer" data-placement="dealgrid" data-campaign="fall-deals">View at Grovemade →</a>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <script src="/js/affiliate-beacon.js" defer></script>
+  <script src="/js/hotspots.js" defer></script>
+  <script src="/js/filter-engine.js" defer></script>
+  <script src="/js/main.js" defer></script>
+
+  <script type="speculationrules">
+  {
+    "prerender": [
+      { "where": { "href_matches": "/guides/*" }, "eagerness": "moderate" },
+      { "where": { "href_matches": "/deals/*" }, "eagerness": "moderate" }
+    ],
+    "prefetch": [
+      { "where": { "selector_matches": "a[rel='sponsored']" }, "eagerness": "conservative" }
+    ]
+  }
+  </script>
+</body>
+</html>
