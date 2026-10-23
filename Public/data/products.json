@@ -1,0 +1,136 @@
+{
+  "products": [
+    {
+      "id": "benq-screenbar",
+      "name": "BenQ ScreenBar Halo LED",
+      "category": "Lighting",
+      "price": 189,
+      "rating": 4.9,
+      "image": "/images/gear/benq-screenbar.jpg",
+      "imgWidth": 400,
+      "imgHeight": 300,
+      "affiliateUrl": "/go/benq-screenbar?placement=filter_engine"
+    },
+    {
+      "id": "keychron-q1",
+      "name": "Keychron Q1 Pro Mechanical Keyboard",
+      "category": "Keyboards",
+      "price": 199,
+      "rating": 4.8,
+      "image": "/images/gear/keychron-q1.jpg",
+      "imgWidth": 400,
+      "imgHeight": 300,
+      "affiliateUrl": "/go/keychron-q1?placement=filter_engine"
+    },
+    {
+      "id": "walnut-shelf",
+      "name": "Grovemade Solid Walnut Desk Shelf",
+      "category": "Accessories",
+      "price": 150,
+      "rating": 4.9,
+      "image": "/images/gear/walnut-shelf.jpg",
+      "imgWidth": 400,
+      "imgHeight": 300,
+      "affiliateUrl": "/go/walnut-shelf?placement=filter_engine"
+    },
+    {
+      "id": "herman-miller-aeron",
+      "name": "Herman Miller Aeron Chair",
+      "category": "Ergonomics",
+      "price": 1495,
+      "rating": 4.9,
+      "image": "/images/gear/aeron-chair.jpg",
+      "imgWidth": 400,
+      "imgHeight": 300,
+      "affiliateUrl": "/go/herman-miller-aeron?placement=filter_engine"
+    },
+    {
+      "id": "shure-mv7",
+      "name": "Shure MV7+ USB/XLR Podcast Mic",
+      "category": "Tech & Audio",
+      "price": 279,
+      "rating": 4.8,
+      "image": "/images/gear/shure-mv7.jpg",
+      "imgWidth": 400,
+      "imgHeight": 300,
+      "affiliateUrl": "/go/shure-mv7?placement=filter_engine"
+    },
+    {
+      "id": "lg-32un880",
+      "name": "LG Ergo 32UN880 Monitor Arm",
+      "category": "Ergonomics",
+      "price": 399,
+      "rating": 4.7,
+      "image": "/images/gear/lg-monitor-arm.jpg",
+      "imgWidth": 400,
+      "imgHeight": 300,
+      "affiliateUrl": "/go/lg-32un880?placement=filter_engine"
+    },
+    {
+      "id": "logitech-mx-master",
+      "name": "Logitech MX Master 3S Mouse",
+      "category": "Accessories",
+      "price": 99,
+      "rating": 4.8,
+      "image": "/images/gear/mx-master.jpg",
+      "imgWidth": 400,
+      "imgHeight": 300,
+      "affiliateUrl": "/go/logitech-mx-master?placement=filter_engine"
+    },
+    {
+      "id": "elgato-key-light",
+      "name": "Elgato Key Light Air",
+      "category": "Lighting",
+      "price": 130,
+      "rating": 4.6,
+      "image": "/images/gear/elgato-key-light.jpg",
+      "imgWidth": 400,
+      "imgHeight": 300,
+      "affiliateUrl": "/go/elgato-key-light?placement=filter_engine"
+    },
+    {
+      "id": "steelcase-gesture",
+      "name": "Steelcase Gesture Chair",
+      "category": "Ergonomics",
+      "price": 979,
+      "rating": 4.8,
+      "image": "/images/gear/steelcase-gesture.jpg",
+      "imgWidth": 400,
+      "imgHeight": 300,
+      "affiliateUrl": "/go/steelcase-gesture?placement=filter_engine"
+    },
+    {
+      "id": "audio-technica-ath-m50x",
+      "name": "Audio-Technica ATH-M50x Headphones",
+      "category": "Tech & Audio",
+      "price": 149,
+      "rating": 4.7,
+      "image": "/images/gear/ath-m50x.jpg",
+      "imgWidth": 400,
+      "imgHeight": 300,
+      "affiliateUrl": "/go/audio-technica-ath-m50x?placement=filter_engine"
+    },
+    {
+      "id": "nuphy-air75",
+      "name": "NuPhy Air75 V2 Low-Profile Keyboard",
+      "category": "Keyboards",
+      "price": 139,
+      "rating": 4.7,
+      "image": "/images/gear/nuphy-air75.jpg",
+      "imgWidth": 400,
+      "imgHeight": 300,
+      "affiliateUrl": "/go/nuphy-air75?placement=filter_engine"
+    },
+    {
+      "id": "fully-jarvis",
+      "name": "Fully Jarvis Standing Desk",
+      "category": "Accessories",
+      "price": 549,
+      "rating": 4.6,
+      "image": "/images/gear/jarvis-desk.jpg",
+      "imgWidth": 400,
+      "imgHeight": 300,
+      "affiliateUrl": "/go/fully-jarvis?placement=filter_engine"
+    }
+  ]
+}

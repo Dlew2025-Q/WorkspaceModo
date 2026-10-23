@@ -1,253 +1,139 @@
 /**
- * Workspacemodo — Interactive Setup Hotspot Engine
- * public/js/hotspots.js
- *
- * Renders percentage-locked hotspot pins over a responsive image, shows
- * floating gear cards on desktop (hover/focus) and a bottom sheet on mobile
- * (tap), and wires outbound links through the existing /go/{slug} KV
- * redirect engine with affiliate-beacon.js auto-tracking.
- *
- * Loaded non-render-blocking via <script ... defer>.
+ * Workspacemodo — Interactive Setup Hotspot Tour
+ * Renders clickable hotspots over the annotated desk setup image.
+ * Desktop: hover reveals tooltip; Mobile/Touch: tap toggles tooltip.
  */
 (function () {
   "use strict";
 
-  // --- Touch / pointer detection -------------------------------------------
-  var isTouch =
-    window.matchMedia("(pointer: coarse)").matches ||
-    "ontouchstart" in window;
-
-  // --- Fetch the setup data -------------------------------------------------
-  function getSetupData() {
-    if (typeof window.SETUP_DATA !== "undefined") {
-      return Promise.resolve(window.SETUP_DATA);
+  const HOTSPOTS = [
+    {
+      id: "monitor-light",
+      x: 50, y: 12,
+      label: "Monitor Light Bar",
+      desc: "Reduces eye strain with asymmetric lighting. Top pick: BenQ ScreenBar Halo.",
+      slug: "benq-screenbar",
+      placement: "hotspot_tour"
+    },
+    {
+      id: "keyboard",
+      x: 38, y: 62,
+      label: "Mechanical Keyboard",
+      desc: "Tactile feedback for long typing sessions. Top pick: Keychron Q1 Pro.",
+      slug: "keychron-q1",
+      placement: "hotspot_tour"
+    },
+    {
+      id: "chair",
+      x: 85, y: 75,
+      label: "Ergonomic Chair",
+      desc: "Posture support for all-day comfort. Top pick: Herman Miller Aeron.",
+      slug: "herman-miller-aeron",
+      placement: "hotspot_tour"
+    },
+    {
+      id: "mic",
+      x: 68, y: 35,
+      label: "Podcast Mic",
+      desc: "Studio-quality audio for calls & content. Top pick: Shure MV7+.",
+      slug: "shure-mv7",
+      placement: "hotspot_tour"
+    },
+    {
+      id: "desk-shelf",
+      x: 20, y: 40,
+      label: "Desk Shelf / Riser",
+      desc: "Raises monitor to eye level. Top pick: Grovemade Walnut Shelf.",
+      slug: "walnut-shelf",
+      placement: "hotspot_tour"
     }
-    return fetch("/data/setups.json", { cache: "force-cache" })
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        // Handle both single-object (legacy) and array (catalog) formats
-        if (Array.isArray(data)) {
-          return data.find(function (s) { return s.hotspots; }) || data[0] || null;
-        }
-        return data;
-      })
-      .catch(function () { return null; });
-  }
+  ];
 
-  // --- Escape HTML to prevent injection from data --------------------------
-  function esc(str) {
-    var d = document.createElement("div");
-    d.textContent = String(str);
-    return d.innerHTML;
-  }
-
-  // --- Build affiliate URL --------------------------------------------------
-  function affiliateUrl(slug, setupId) {
-    return (
-      "/go/" +
-      encodeURIComponent(slug) +
-      "?placement=hotspot&subid=" +
-      encodeURIComponent(setupId)
-    );
-  }
-
-  // --- Render pins ----------------------------------------------------------
-  function renderHotspots(container, data) {
-    var frag = document.createDocumentFragment();
-
-    data.hotspots.forEach(function (spot) {
-      var pin = document.createElement("div");
-      pin.className = "hotspot-pin";
-      pin.id = spot.id;
-      pin.style.left = spot.x + "%";
-      pin.style.top = spot.y + "%";
-
-      if (spot.x < 25) pin.setAttribute("data-align-x", "left");
-      if (spot.x > 75) pin.setAttribute("data-align-x", "right");
-      if (spot.y < 30) pin.setAttribute("data-align-y", "top");
-
-      pin.setAttribute("tabindex", "0");
-      pin.setAttribute("role", "button");
-      pin.setAttribute("aria-label", spot.name + " (" + spot.price + ")");
-      pin.setAttribute("aria-expanded", "false");
-
-      var badgeHtml = spot.badge
-        ? '<span class="card-badge">' + esc(spot.badge) + "</span>"
-        : "";
-
-      pin.innerHTML =
-        '<div class="pin-bullet" aria-hidden="true">+</div>' +
-        '<div class="hotspot-card" role="dialog" aria-modal="false">' +
-          '<div class="card-header">' +
-            '<span class="card-category">' + esc(spot.category) + "</span>" +
-            badgeHtml +
-          "</div>" +
-          '<h4 class="card-title">' + esc(spot.name) + "</h4>" +
-          '<div class="card-footer">' +
-            '<span class="card-price">' + esc(spot.price) + "</span>" +
-            '<a href="' + affiliateUrl(spot.slug, data.id) + '" ' +
-              'target="_blank" ' +
-              'rel="sponsored noopener noreferrer" ' +
-              'class="card-cta" ' +
-              'data-placement="hotspot">' +
-              "Check Deal \u2197" +
-            "</a>" +
-          "</div>" +
-        "</div>";
-
-      pin.addEventListener("click", function (e) {
-        if (e.target.closest("a")) return;
-        if (isTouch) {
-          openSheet(spot, data);
-          return;
-        }
-        var wasActive = pin.classList.contains("is-active");
-        closeAllPins();
-        if (!wasActive) {
-          pin.classList.add("is-active");
-          pin.setAttribute("aria-expanded", "true");
-        }
-      });
-
-      pin.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          if (isTouch) {
-            openSheet(spot, data);
-          } else {
-            pin.click();
-          }
-        } else if (e.key === "Escape") {
-          pin.classList.remove("is-active");
-          pin.setAttribute("aria-expanded", "false");
-          pin.focus();
-        }
-      });
-
-      frag.appendChild(pin);
-    });
-
-    container.appendChild(frag);
-  }
-
-  // --- Close all active pins ------------------------------------------------
-  function closeAllPins() {
-    document.querySelectorAll(".hotspot-pin.is-active").forEach(function (p) {
-      p.classList.remove("is-active");
-      p.setAttribute("aria-expanded", "false");
-    });
-  }
-
-  // --- Mobile bottom sheet --------------------------------------------------
-  var sheetEl = null;
-  var backdropEl = null;
-
-  function ensureSheet() {
-    if (sheetEl) return;
-
-    backdropEl = document.createElement("div");
-    backdropEl.className = "hotspot-sheet-backdrop";
-    backdropEl.addEventListener("click", closeSheet);
-
-    sheetEl = document.createElement("div");
-    sheetEl.className = "hotspot-sheet";
-    sheetEl.setAttribute("role", "dialog");
-    sheetEl.setAttribute("aria-modal", "true");
-    sheetEl.setAttribute("aria-label", "Gear details");
-    sheetEl.innerHTML =
-      '<button class="sheet-close" aria-label="Close details">\u00d7</button>' +
-      '<div class="sheet-handle" aria-hidden="true"></div>' +
-      '<div class="sheet-body"></div>';
-
-    sheetEl.querySelector(".sheet-close").addEventListener("click", closeSheet);
-    document.body.appendChild(backdropEl);
-    document.body.appendChild(sheetEl);
-  }
-
-  function openSheet(spot, data) {
-    ensureSheet();
-    var body = sheetEl.querySelector(".sheet-body");
-    var badgeHtml = spot.badge
-      ? '<span class="card-badge">' + esc(spot.badge) + "</span>"
-      : "";
-    body.innerHTML =
-      '<div class="card-header">' +
-        '<span class="card-category">' + esc(spot.category) + "</span>" +
-        badgeHtml +
-      "</div>" +
-      '<h4 class="card-title" style="font-size:18px;margin:8px 0;">' +
-        esc(spot.name) +
-      "</h4>" +
-      '<div class="card-footer" style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;">' +
-        '<span class="card-price" style="font-size:18px;">' + esc(spot.price) + "</span>" +
-        '<a href="' + affiliateUrl(spot.slug, data.id) + '" ' +
-          'target="_blank" ' +
-          'rel="sponsored noopener noreferrer" ' +
-          'class="card-cta" ' +
-          'data-placement="hotspot">' +
-          "Check Deal \u2197" +
-        "</a>" +
-      "</div>";
-
-    requestAnimationFrame(function () {
-      backdropEl.classList.add("is-open");
-      sheetEl.classList.add("is-open");
-      sheetEl.querySelector(".sheet-close").focus();
-    });
-  }
-
-  function closeSheet() {
-    if (!sheetEl) return;
-    backdropEl.classList.remove("is-open");
-    sheetEl.classList.remove("is-open");
-  }
-
-  // --- Global listeners -----------------------------------------------------
-  function setupGlobalListeners() {
-    document.addEventListener("click", function (e) {
-      if (!e.target.closest(".hotspot-pin")) closeAllPins();
-    });
-
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") {
-        if (sheetEl && sheetEl.classList.contains("is-open")) {
-          closeSheet();
-        } else {
-          closeAllPins();
-        }
-      }
-    });
-
-    window.matchMedia("(pointer: coarse)").addEventListener("change", function (m) {
-      isTouch = m.matches;
-    });
-  }
-
-  // --- Image load → remove loading state (CLS guard) -----------------------
-  function markImageLoaded(viewport) {
-    var img = viewport.querySelector(".hotspot-bg-image");
-    if (!img) return;
-    function done() { viewport.classList.remove("is-loading"); }
-    if (img.complete && img.naturalWidth > 0) done();
-    else img.addEventListener("load", done, { once: true });
-  }
-
-  // --- Init -----------------------------------------------------------------
   document.addEventListener("DOMContentLoaded", function () {
-    var container = document.getElementById("hotspots-layer");
-    var viewport = document.getElementById("hotspot-container");
-    if (!container) return;
+    const stage = document.getElementById("hotspot-stage");
+    if (!stage) return;
 
-    if (viewport) viewport.classList.add("is-loading");
+    const img = stage.querySelector("img");
+    if (!img) return;
 
-    getSetupData().then(function (data) {
-      if (!data || !data.hotspots) {
-        console.warn("[hotspots] No setup data found.");
-        return;
-      }
-      renderHotspots(container, data);
-      setupGlobalListeners();
-      if (viewport) markImageLoaded(viewport);
+    // Ensure stage is positioned for hotspot overlay
+    stage.style.position = "relative";
+    stage.style.display = "inline-block";
+
+    HOTSPOTS.forEach(function (spot) {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "hotspot-dot";
+      dot.setAttribute("aria-label", spot.label + " — " + spot.desc);
+      dot.style.position = "absolute";
+      dot.style.left = spot.x + "%";
+      dot.style.top = spot.y + "%";
+      dot.style.transform = "translate(-50%, -50%)";
+
+      // Tooltip
+      const tip = document.createElement("span");
+      tip.className = "hotspot-tooltip";
+      tip.setAttribute("role", "tooltip");
+      tip.innerHTML =
+        "<strong>" + spot.label + "</strong><br>" + spot.desc +
+        '<br><a href="/go/' + spot.slug + "?placement=" + spot.placement +
+        '" target="_blank" rel="sponsored noopener noreferrer">View Deal ↗</a>';
+      dot.appendChild(tip);
+
+      // Toggle on click/tap (mobile + keyboard)
+      dot.addEventListener("click", function (e) {
+        e.stopPropagation();
+        // Close other open tooltips
+        stage.querySelectorAll(".hotspot-dot.is-open").forEach(function (d) {
+          if (d !== dot) d.classList.remove("is-open");
+        });
+        dot.classList.toggle("is-open");
+      });
+
+      stage.appendChild(dot);
     });
+
+    // Close tooltips when clicking elsewhere
+    document.addEventListener("click", function () {
+      stage.querySelectorAll(".hotspot-dot.is-open").forEach(function (d) {
+        d.classList.remove("is-open");
+      });
+    });
+
+    // Inject hotspot styles
+    const style = document.createElement("style");
+    style.textContent = `
+      .hotspot-dot {
+        width: 22px; height: 22px; border-radius: 50%;
+        background: rgba(56,189,248,0.85); border: 2px solid #fff;
+        cursor: pointer; padding: 0; z-index: 5;
+        box-shadow: 0 0 0 4px rgba(56,189,248,0.25);
+        animation: hotspot-pulse 2s infinite;
+      }
+      .hotspot-dot:focus-visible { outline: 2px solid #38bdf8; outline-offset: 3px; }
+      .hotspot-tooltip {
+        position: absolute; bottom: calc(100% + 10px); left: 50%;
+        transform: translateX(-50%);
+        background: #0f172a; color: #f1f5f9;
+        border: 1px solid rgba(56,189,248,0.3); border-radius: 10px;
+        padding: 12px 16px; width: 240px; font-size: 13px; line-height: 1.5;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.5); z-index: 10;
+        opacity: 0; visibility: hidden; pointer-events: none;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+      }
+      .hotspot-tooltip a {
+        display: inline-block; margin-top: 8px; color: #38bdf8;
+        font-weight: 700; text-decoration: underline;
+      }
+      .hotspot-dot.is-open .hotspot-tooltip,
+      .hotspot-dot:hover .hotspot-tooltip {
+        opacity: 1; visibility: visible; pointer-events: auto;
+      }
+      @keyframes hotspot-pulse {
+        0%,100% { box-shadow: 0 0 0 4px rgba(56,189,248,0.25); }
+        50% { box-shadow: 0 0 0 8px rgba(56,189,248,0.08); }
+      }
+    `;
+    document.head.appendChild(style);
   });
 })();

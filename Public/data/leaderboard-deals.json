@@ -1,0 +1,69 @@
+{
+  "trendingGear": [
+    {
+      "rank": 1,
+      "slug": "benq-screenbar",
+      "name": "BenQ ScreenBar Halo LED",
+      "category": "Lighting",
+      "rating": 4.9,
+      "reviews": 184,
+      "weeklyClicks": 1420,
+      "badge": "#1 Most Popular",
+      "promoCode": "MODOHALO10",
+      "discount": "10% OFF",
+      "affiliateUrl": "/go/benq-screenbar?placement=trending_leaderboard&subid=rank1"
+    },
+    {
+      "rank": 2,
+      "slug": "keychron-q1",
+      "name": "Keychron Q1 Pro Mechanical Keyboard",
+      "category": "Keyboards",
+      "rating": 4.8,
+      "reviews": 128,
+      "weeklyClicks": 980,
+      "badge": "Top Mechanical Pick",
+      "promoCode": "KEYCHRON15",
+      "discount": "15% OFF",
+      "affiliateUrl": "/go/keychron-q1?placement=trending_leaderboard&subid=rank2"
+    },
+    {
+      "rank": 3,
+      "slug": "walnut-shelf",
+      "name": "Grovemade Solid Walnut Desk Shelf",
+      "category": "Accessories",
+      "rating": 4.9,
+      "reviews": 210,
+      "weeklyClicks": 890,
+      "badge": "Editorial Choice",
+      "promoCode": "WORKSPACEMODO",
+      "discount": "$20 OFF",
+      "affiliateUrl": "/go/walnut-shelf?placement=trending_leaderboard&subid=rank3"
+    },
+    {
+      "rank": 4,
+      "slug": "herman-miller-aeron",
+      "name": "Herman Miller Aeron Chair",
+      "category": "Ergonomics",
+      "rating": 4.9,
+      "reviews": 412,
+      "weeklyClicks": 740,
+      "badge": "Ergonomic Gold Standard",
+      "promoCode": null,
+      "discount": "Free Shipping",
+      "affiliateUrl": "/go/herman-miller-aeron?placement=trending_leaderboard&subid=rank4"
+    },
+    {
+      "rank": 5,
+      "slug": "shure-mv7",
+      "name": "Shure MV7+ USB/XLR Podcast Mic",
+      "category": "Tech & Audio",
+      "rating": 4.8,
+      "reviews": 95,
+      "weeklyClicks": 610,
+      "badge": "Creator Favorite",
+      "promoCode": "SHUREAUDIO",
+      "discount": "5% Extra Coupon",
+      "affiliateUrl": "/go/shure-mv7?placement=trending_leaderboard&subid=rank5"
+    }
+  ]
+}

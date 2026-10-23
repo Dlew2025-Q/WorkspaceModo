@@ -1,356 +1,146 @@
 /**
- * Workspacemodo — Client-Side Multi-Faceted Filter Engine with URL Sync
- * public/js/filter-engine.js
- *
- * Filters the workspace catalog by Role, Budget Tier, and Aesthetic Vibe
- * with zero page reloads. Active filter state is synced to URL query params
- * via history.replaceState for deep-linkable inbound links (e.g. from
- * Pinterest pins: ?role=developer&vibe=warm-wood).
- *
- * Performance:
- *   - Loaded with `defer` (never render-blocking)
- *   - DOM updates batched in a single innerHTML rebuild (< 16ms for < 50 items)
- *   - No virtual DOM, no framework, no dependencies
- *   - CLS-safe: grid container has min-height; cards use aspect-ratio thumbnails
- *
- * Affiliate:
- *   - Outbound links route through /go/{slug}?placement=filtered_grid
- *   - affiliate-beacon.js auto-detects and tracks clicks via data-placement
- *   - Filter changes are logged to /api/track-click for analytics
+ * Workspacemodo — Multi-Faceted Filter Engine
+ * Filters the product grid by category, budget, and minimum rating.
+ * Fetches from /data/products.json and renders accessible product cards.
  */
 (function () {
   "use strict";
 
-  var setupsData = [];
-  var activeFilters = {
-    role: "all",
-    budget: "all",
-    aesthetic: "all",
-  };
+  document.addEventListener("DOMContentLoaded", function () {
+    const grid = document.getElementById("product-grid");
+    const countEl = document.getElementById("filter-count");
+    const categorySelect = document.getElementById("filter-category");
+    const budgetSelect = document.getElementById("filter-budget");
+    const ratingSelect = document.getElementById("filter-rating");
 
-  // --- DOM references (cached on init) -------------------------------------
-  var roleSelect, budgetSelect, aestheticSelect;
-  var resetBtn, emptyResetBtn;
-  var chipsContainer, chipsList;
-  var gridContainer, emptyState, countDisplay;
+    if (!grid) return;
 
-  // --- Facet label maps ----------------------------------------------------
-  var VIBE_MAP = {
-    "warm-wood": "Warm Wood",
-    "dark-mode": "Dark Mode",
-    "minimalist-white": "Minimalist White",
-    cyberpunk: "Cyberpunk",
-  };
+    let allProducts = [];
 
-  var BUDGET_MAP = {
-    budget: "Under $1,000",
-    mid: "$1,000 – $3,000",
-    endgame: "$3,000+",
-  };
-
-  // --- Init -----------------------------------------------------------------
-  function init() {
-    roleSelect = document.getElementById("filter-role");
-    budgetSelect = document.getElementById("filter-budget");
-    aestheticSelect = document.getElementById("filter-aesthetic");
-    resetBtn = document.getElementById("filter-reset-btn");
-    emptyResetBtn = document.getElementById("empty-reset-btn");
-    chipsContainer = document.getElementById("active-chips-container");
-    chipsList = document.getElementById("chips-list");
-    gridContainer = document.getElementById("setups-grid");
-    emptyState = document.getElementById("empty-state");
-    countDisplay = document.getElementById("results-count");
-
-    // Bail if the filter section isn't on this page
-    if (!gridContainer || !roleSelect) return;
-
-    fetch("/data/setups.json", { cache: "force-cache" })
-      .then(function (res) {
-        return res.json();
-      })
+    // Fetch product data
+    fetch("/data/products.json")
+      .then(function (res) { return res.json(); })
       .then(function (data) {
-        setupsData = Array.isArray(data) ? data : [data];
-
-        // Read initial filter state from URL (deep-link support)
-        readUrlParams();
-
-        // Wire up event listeners
-        roleSelect.addEventListener("change", function (e) {
-          setFilter("role", e.target.value);
-        });
-        budgetSelect.addEventListener("change", function (e) {
-          setFilter("budget", e.target.value);
-        });
-        aestheticSelect.addEventListener("change", function (e) {
-          setFilter("aesthetic", e.target.value);
-        });
-
-        resetBtn.addEventListener("click", resetAllFilters);
-        if (emptyResetBtn) {
-          emptyResetBtn.addEventListener("click", resetAllFilters);
-        }
-
-        // Listen for browser back/forward navigation
-        window.addEventListener("popstate", function () {
-          readUrlParams();
-          applyFilters();
-        });
-
-        // Initial render
+        allProducts = data.products || [];
         applyFilters();
       })
       .catch(function (err) {
-        console.error("[filter-engine] Failed to load setups catalog:", err);
-        if (countDisplay) {
-          countDisplay.textContent = "Unable to load setups";
-        }
+        console.error("Error loading products:", err);
+        grid.innerHTML = '<p class="filter-empty">Unable to load products. Please try again later.</p>';
       });
-  }
 
-  // --- Read URL params → activeFilters + sync dropdowns --------------------
-  function readUrlParams() {
-    var params = new URLSearchParams(window.location.search);
-
-    if (params.has("role")) activeFilters.role = params.get("role");
-    if (params.has("budget")) activeFilters.budget = params.get("budget");
-
-    // Support both "aesthetic" and legacy "vibe" query param
-    if (params.has("aesthetic")) {
-      activeFilters.aesthetic = params.get("aesthetic");
-    } else if (params.has("vibe")) {
-      activeFilters.aesthetic = params.get("vibe");
-    }
-
-    // Sync select dropdowns to reflect URL state
-    if (roleSelect) roleSelect.value = activeFilters.role;
-    if (budgetSelect) budgetSelect.value = activeFilters.budget;
-    if (aestheticSelect) aestheticSelect.value = activeFilters.aesthetic;
-  }
-
-  // --- Set a single filter, sync URL, re-render ----------------------------
-  function setFilter(key, value) {
-    activeFilters[key] = value;
-    syncUrlParams();
-    applyFilters();
-    logFilterChange(key, value);
-  }
-
-  // --- Sync active filters to URL query params (replaceState) --------------
-  function syncUrlParams() {
-    var params = new URLSearchParams();
-
-    if (activeFilters.role !== "all") params.set("role", activeFilters.role);
-    if (activeFilters.budget !== "all") params.set("budget", activeFilters.budget);
-    if (activeFilters.aesthetic !== "all") params.set("aesthetic", activeFilters.aesthetic);
-
-    var newQuery = params.toString()
-      ? "?" + params.toString()
-      : window.location.pathname;
-
-    window.history.replaceState({}, "", newQuery + window.location.hash);
-  }
-
-  // --- Reset all filters to "all" ------------------------------------------
-  function resetAllFilters() {
-    activeFilters.role = "all";
-    activeFilters.budget = "all";
-    activeFilters.aesthetic = "all";
-
-    if (roleSelect) roleSelect.value = "all";
-    if (budgetSelect) budgetSelect.value = "all";
-    if (aestheticSelect) aestheticSelect.value = "all";
-
-    syncUrlParams();
-    applyFilters();
-  }
-
-  // --- Apply filters and render --------------------------------------------
-  function applyFilters() {
-    var filtered = setupsData.filter(function (item) {
-      if (activeFilters.role !== "all" && item.role !== activeFilters.role)
-        return false;
-      if (activeFilters.budget !== "all" && item.budgetTier !== activeFilters.budget)
-        return false;
-      if (
-        activeFilters.aesthetic !== "all" &&
-        item.aesthetic !== activeFilters.aesthetic
-      )
-        return false;
-      return true;
+    // Attach change listeners
+    [categorySelect, budgetSelect, ratingSelect].forEach(function (sel) {
+      if (sel) sel.addEventListener("change", applyFilters);
     });
 
-    renderGrid(filtered);
-    renderChips();
-    updateCounter(filtered.length, setupsData.length);
-  }
+    function applyFilters() {
+      const category = categorySelect ? categorySelect.value : "all";
+      const maxBudget = budgetSelect ? parseInt(budgetSelect.value, 10) : 999999;
+      const minRating = ratingSelect ? parseFloat(ratingSelect.value) : 0;
 
-  // --- Render the grid of setup cards --------------------------------------
-  function renderGrid(items) {
-    // Use DocumentFragment for batch DOM insertion (single reflow)
-    var frag = document.createDocumentFragment();
-
-    if (items.length === 0) {
-      gridContainer.style.display = "none";
-      gridContainer.innerHTML = "";
-      if (emptyState) emptyState.style.display = "block";
-      return;
-    }
-
-    gridContainer.style.display = "grid";
-    if (emptyState) emptyState.style.display = "none";
-
-    items.forEach(function (setup) {
-      var card = document.createElement("article");
-      card.className = "setup-card";
-
-      var badgesHtml =
-        '<div class="card-badges">' +
-          '<span class="badge-tag">' + esc(capitalize(setup.role)) + "</span>" +
-          '<span class="badge-tag">' + esc(formatVibe(setup.aesthetic)) + "</span>" +
-          '<span class="badge-tag badge-budget">' + esc(formatBudget(setup.budgetTier)) + "</span>" +
-        "</div>";
-
-      var gearHtml = setup.featuredGear
-        ? "<strong>Key Gear:</strong> " + esc(setup.featuredGear.join(" • "))
-        : "";
-
-      var priceHtml = setup.budgetAmount
-        ? "Est. ~$" + setup.budgetAmount.toLocaleString()
-        : "";
-
-      card.innerHTML =
-        '<div class="card-thumb-wrap">' +
-          "<picture>" +
-            '<source srcset="' + esc(setup.image.webp) + '" type="image/webp">' +
-            '<img src="' + esc(setup.image.fallback) + '" ' +
-              'alt="' + esc(setup.title) + '" ' +
-              'width="' + esc(setup.image.width) + '" ' +
-              'height="' + esc(setup.image.height) + '" ' +
-              'class="card-thumb" ' +
-              'loading="lazy" ' +
-              'decoding="async" />' +
-          "</picture>" +
-        "</div>" +
-        '<div class="card-body">' +
-          badgesHtml +
-          '<h3 class="setup-title">' + esc(setup.title) + "</h3>" +
-          '<p class="gear-list">' + gearHtml + "</p>" +
-          '<div class="setup-footer">' +
-            '<span class="setup-price">' + esc(priceHtml) + "</span>" +
-            '<a href="' + esc(setup.primaryLink) + '" ' +
-              'target="_blank" ' +
-              'rel="sponsored noopener noreferrer" ' +
-              'class="card-cta" ' +
-              'data-placement="filtered_grid">' +
-              "Explore Gear \u2197" +
-            "</a>" +
-          "</div>" +
-        "</div>";
-
-      frag.appendChild(card);
-    });
-
-    // Single innerHTML swap — one reflow, < 16ms for small catalogs
-    gridContainer.innerHTML = "";
-    gridContainer.appendChild(frag);
-  }
-
-  // --- Render active filter chips with remove buttons ----------------------
-  function renderChips() {
-    if (!chipsList || !chipsContainer) return;
-    chipsList.innerHTML = "";
-
-    var activeEntries = Object.entries(activeFilters).filter(function (entry) {
-      return entry[1] !== "all";
-    });
-
-    if (activeEntries.length === 0) {
-      chipsContainer.style.display = "none";
-      if (resetBtn) resetBtn.style.display = "none";
-      return;
-    }
-
-    chipsContainer.style.display = "flex";
-    if (resetBtn) resetBtn.style.display = "block";
-
-    activeEntries.forEach(function (entry) {
-      var key = entry[0];
-      var val = entry[1];
-      var chip = document.createElement("button");
-      chip.type = "button";
-      chip.className = "chip-pill";
-      chip.setAttribute(
-        "aria-label",
-        "Remove filter: " + formatChipLabel(key, val)
-      );
-      chip.innerHTML = esc(formatChipLabel(key, val)) + " \u2715";
-      chip.addEventListener("click", function () {
-        setFilter(key, "all");
-        var sel = document.getElementById("filter-" + key);
-        if (sel) sel.value = "all";
+      const filtered = allProducts.filter(function (p) {
+        const catMatch = category === "all" || p.category === category;
+        const budgetMatch = p.price <= maxBudget;
+        const ratingMatch = p.rating >= minRating;
+        return catMatch && budgetMatch && ratingMatch;
       });
-      chipsList.appendChild(chip);
-    });
-  }
 
-  // --- Update results counter (aria-live for screen readers) ---------------
-  function updateCounter(count, total) {
-    if (!countDisplay) return;
-    if (count === total) {
-      countDisplay.textContent = "Showing all " + total + " setups";
-    } else {
-      countDisplay.textContent =
-        "Showing " + count + " of " + total + " setups";
+      renderGrid(filtered);
+      updateCount(filtered.length, allProducts.length);
     }
-  }
 
-  // --- Log filter change telemetry to beacon endpoint -----------------------
-  function logFilterChange(facet, value) {
-    try {
-      var payload = JSON.stringify({
-        event: "filter_changed",
-        facet: facet,
-        value: value,
-        referrer: window.location.pathname,
-        timestamp: new Date().toISOString(),
-      });
-      if (navigator.sendBeacon) {
-        navigator.sendBeacon("/api/track-click", payload);
+    function renderGrid(items) {
+      grid.innerHTML = "";
+
+      if (items.length === 0) {
+        grid.innerHTML = '<p class="filter-empty" role="status">No gear matches your filters. Try widening your criteria.</p>';
+        return;
       }
-    } catch (err) {
-      // Swallow — telemetry failure must never break UX
+
+      items.forEach(function (p) {
+        const card = document.createElement("article");
+        card.className = "product-card";
+        card.setAttribute("role", "listitem");
+        card.innerHTML = `
+          <div class="card-image-wrap">
+            <img
+              src="${p.image}"
+              alt="${p.name}"
+              width="${p.imgWidth || 400}"
+              height="${p.imgHeight || 300}"
+              loading="lazy"
+            />
+          </div>
+          <div class="card-body">
+            <span class="card-category">${p.category}</span>
+            <h3 class="card-name">${p.name}</h3>
+            <div class="card-meta">
+              <span class="card-rating">★ ${p.rating}</span>
+              <span class="card-price">$${p.price.toLocaleString()}</span>
+            </div>
+            <a
+              href="${p.affiliateUrl}"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              class="card-cta"
+              data-placement="filter_engine"
+              aria-label="View deal for ${p.name}"
+            >
+              View Deal ↗
+            </a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
     }
-  }
 
-  // --- Utility helpers ------------------------------------------------------
-  function esc(str) {
-    var d = document.createElement("div");
-    d.textContent = String(str);
-    return d.innerHTML;
-  }
+    function updateCount(shown, total) {
+      if (!countEl) return;
+      countEl.textContent = "Showing " + shown + " of " + total + " gear items";
+    }
 
-  function capitalize(str) {
-    return str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
-  }
-
-  function formatVibe(vibe) {
-    return VIBE_MAP[vibe] || vibe;
-  }
-
-  function formatBudget(tier) {
-    return BUDGET_MAP[tier] || tier;
-  }
-
-  function formatChipLabel(key, val) {
-    if (key === "aesthetic") return formatVibe(val);
-    if (key === "budget") return formatBudget(val);
-    return capitalize(val);
-  }
-
-  // --- Self-boot on DOM ready ----------------------------------------------
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
+    // Inject filter engine styles
+    const style = document.createElement("style");
+    style.textContent = `
+      .filter-section { max-width: 1200px; margin: 56px auto; padding: 0 20px; }
+      .filter-section h2,
+      .deal-section h2 { font-size: 28px; font-weight: 800; color: #fff; margin: 0 0 4px; }
+      .section-subtitle { font-size: 14px; color: #94a3b8; margin: 0 0 24px; }
+      .filter-controls { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+      .filter-label {
+        display: flex; flex-direction: column; gap: 4px;
+        font-size: 12px; font-weight: 600; color: #94a3b8;
+      }
+      .filter-label select {
+        background: #0f172a; color: #f1f5f9; border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px; padding: 10px 14px; font-size: 14px; font-weight: 600;
+        cursor: pointer; min-width: 160px;
+      }
+      .filter-label select:focus-visible { outline: 2px solid #38bdf8; outline-offset: 2px; }
+      .product-grid {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 20px; margin-top: 20px;
+      }
+      .product-card {
+        background: #0f172a; border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px; overflow: hidden; transition: border-color 0.15s ease, transform 0.15s ease;
+      }
+      .product-card:hover { border-color: rgba(56,189,248,0.3); transform: translateY(-2px); }
+      .card-image-wrap { width: 100%; aspect-ratio: 4/3; overflow: hidden; background: #1e293b; }
+      .card-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+      .card-body { padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+      .card-category {
+        font-size: 11px; text-transform: uppercase; color: #38bdf8;
+        font-weight: 700; letter-spacing: 0.05em;
+      }
+      .card-name { font-size: 15px; font-weight: 700; color: #fff; margin: 0; }
+      .card-meta { display: flex; justify-content: space-between; align-items: center; }
+      .card-rating { font-size: 13px; color: #f59e0b; font-weight: 600; }
+      .card-price { font-size: 16px; font-weight: 800; color: #34d399; }
+      .filter-empty { color: #94a3b8; font-size: 14px; padding: 24px 0; }
+      .deal-section { max-width: 1200px; margin: 56px auto; padding: 0 20px; }
+    `;
+    document.head.appendChild(style);
+  });
 })();

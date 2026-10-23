@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary Meta -->
+  <title>Workspacemodo — Build Your Ultimate Workspace | Gear Guides, Deals & Reviews</title>
+  <meta name="description" content="Workspacemodo helps you build the perfect workspace with curated gear guides, trending leaderboards, exclusive promo codes, and expert reviews on lighting, ergonomics, keyboards, audio, and desks." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://workspacemodo.com/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Workspacemodo — Build Your Ultimate Workspace" />
+  <meta property="og:description" content="Curated gear guides, trending leaderboards, and exclusive promo codes for the perfect workspace." />
+  <meta property="og:url" content="https://workspacemodo.com/" />
+  <meta property="og:image" content="https://workspacemodo.com/images/og-cover.jpg" width="1200" height="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Workspacemodo — Build Your Ultimate Workspace" />
+  <meta name="twitter:description" content="Curated gear guides, trending leaderboards, and exclusive promo codes." />
+  <meta name="twitter:image" content="https://workspacemodo.com/images/og-cover.jpg" />
+
+  <!-- Preload Critical Assets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" />
+
+  <!-- Critical CSS (inline for LCP) -->
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#0b1120;--surface:#0f172a;--surface-2:#1e293b;
+      --text:#f1f5f9;--text-muted:#94a3b8;--accent:#38bdf8;--accent-2:#0ea5e9;
+      --green:#34d399;--amber:#f59e0b;--radius:12px;
+    }
+    html{scroll-behavior:smooth;font-size:16px}
+    body{
+      font-family:'Inter',system-ui,-apple-system,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%;height:auto}
+    .container{max-width:1200px;margin:0 auto;padding:0 20px}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  </style>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/leaderboard-deals.css" />
+</head>
+<body>
+
+  <!-- ====================================================
+       1. HERO SECTION (LCP Optimized)
+       ==================================================== -->
+  <header class="hero" role="banner">
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <span class="hero-eyebrow">Workspace Gear · Curated &amp; Tested</span>
+        <h1 class="hero-title">Build Your Ultimate <span class="accent">Workspace</span></h1>
+        <p class="hero-subtitle">
+          Expert-curated gear guides, trending leaderboards, and exclusive partner
+          promo codes — so you can upgrade your desk without the guesswork.
+        </p>
+        <div class="hero-ctas">
+          <a href="#trending-gear" class="btn btn-primary">View Trending Gear</a>
+          <a href="#filter-engine" class="btn btn-secondary">Browse All Gear</a>
+        </div>
+        <div class="hero-trust">
+          <span>★ 4.9 Average Rating</span>
+          <span>•</span>
+          <span>500+ Gear Items Reviewed</span>
+          <span>•</span>
+          <span>Exclusive Partner Deals</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img
+          src="/images/hero-workspace.jpg"
+          alt="A clean, modern desk setup with monitor, keyboard, and lighting"
+          width="600" height="400" fetchpriority="high"
+        />
+      </div>
+    </div>
+  </header>
+
+  <!-- ====================================================
+       2. INTERACTIVE SETUP HOTSPOT GEAR TOUR (Step 10)
+       ==================================================== -->
+  <section id="hotspot-tour" class="hotspot-section" aria-labelledby="hotspot-heading">
+    <div class="container">
+      <h2 id="hotspot-heading">Interactive Setup Tour</h2>
+      <p class="section-subtitle">Hover or tap the hotspots to explore each part of the ideal workspace.</p>
+      <div class="hotspot-stage" id="hotspot-stage">
+        <img
+          src="/images/setup-tour.jpg"
+          alt="Annotated desk setup showing gear placement zones"
+          width="1000" height="560"
+        />
+        <!-- Hotspots injected by hotspots.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       3. MULTI-FACETED FILTER ENGINE (Step 11)
+       ==================================================== -->
+  <section id="filter-engine" class="filter-section" aria-labelledby="filter-heading">
+    <div class="container">
+      <h2 id="filter-heading">Find Your Perfect Gear</h2>
+      <p class="section-subtitle">Filter by category, budget, and rating to narrow down the best picks.</p>
+
+      <div class="filter-controls" role="group" aria-label="Gear filters">
+        <label class="filter-label">
+          Category
+          <select id="filter-category" aria-label="Filter by category">
+            <option value="all">All Categories</option>
+            <option value="Lighting">Lighting</option>
+            <option value="Ergonomics">Ergonomics</option>
+            <option value="Keyboards">Keyboards</option>
+            <option value="Tech & Audio">Tech &amp; Audio</option>
+            <option value="Accessories">Accessories</option>
+          </select>
+        </label>
+        <label class="filter-label">
+          Max Budget
+          <select id="filter-budget" aria-label="Filter by budget">
+            <option value="999999">Any Price</option>
+            <option value="50">Under $50</option>
+            <option value="150">Under $150</option>
+            <option value="300">Under $300</option>
+            <option value="600">Under $600</option>
+          </select>
+        </label>
+        <label class="filter-label">
+          Min Rating
+          <select id="filter-rating" aria-label="Filter by minimum rating">
+            <option value="0">Any Rating</option>
+            <option value="4.5">4.5+ Stars</option>
+            <option value="4.8">4.8+ Stars</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="filter-count" id="filter-count" aria-live="polite" aria-atomic="true"></div>
+
+      <div class="product-grid" id="product-grid" role="list" aria-label="Filtered gear results">
+        <!-- Product cards injected by filter-engine.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       4. TRENDING GEAR INDEX & LEADERBOARD (Step 13)
+       ==================================================== -->
+  <section id="trending-gear" class="trending-section" aria-labelledby="trending-heading">
+    <div class="trending-header">
+      <div>
+        <h2 id="trending-heading">🔥 Trending Gear Index</h2>
+        <p>The top 5 most-viewed and highest-converting gear items this week.</p>
+      </div>
+      <div class="trending-tabs" role="tablist" aria-label="Filter leaderboard by category">
+        <button class="tab-btn is-active" role="tab" data-category="all" aria-selected="true">All Categories</button>
+        <button class="tab-btn" role="tab" data-category="Ergonomics" aria-selected="false">Ergonomics</button>
+        <button class="tab-btn" role="tab" data-category="Tech & Audio" aria-selected="false">Tech &amp; Audio</button>
+        <button class="tab-btn" role="tab" data-category="Lighting" aria-selected="false">Lighting &amp; Accessories</button>
+      </div>
+    </div>
+
+    <div class="filter-count" id="filter-count-leaderboard" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="leaderboard-list" id="leaderboard-list" role="list" aria-label="Trending gear leaderboard">
+      <!-- Leaderboard rows injected by leaderboard-deals.js -->
+    </div>
+  </section>
+
+  <!-- ====================================================
+       5. CURATED PRODUCT SHOWCASE & DEAL GRID WITH PROMO VOUCHERS (Step 14)
+       ==================================================== -->
+  <section id="deal-grid" class="deal-section" aria-labelledby="deal-heading">
+    <div class="container">
+      <h2 id="deal-heading">Exclusive Partner Deals &amp; Promo Codes</h2>
+      <p class="section-subtitle">Hand-picked vouchers from our trusted partners. Click to copy, then shop.</p>
+
+      <div class="deal-grid" id="deal-grid-container" role="list" aria-label="Promo code deal grid">
+        <!-- Deal cards injected by leaderboard-deals.js (shared data) -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       6. GLOBAL FOOTER — FTC, Author Verification, Privacy
+       ==================================================== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-col">
+        <h3 class="footer-logo">Workspacemodo</h3>
+        <p class="footer-tagline">Your trusted guide to building the perfect workspace.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#trending-gear">Trending Gear</a></li>
+          <li><a href="#filter-engine">All Gear</a></li>
+          <li><a href="#deal-grid">Deals &amp; Promo Codes</a></li>
+          <li><a href="#hotspot-tour">Setup Tour</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+          <li><a href="/affiliate-disclosure">Affiliate Disclosure</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="mailto:hello@workspacemodo.com">hello@workspacemodo.com</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- FTC Affiliate Disclosure -->
+    <div class="footer-disclosure">
+      <div class="container">
+        <p>
+          <strong>Affiliate Disclosure (FTC):</strong> Workspacemodo is a reader-supported
+          site. When you buy through links on our site, we may earn an affiliate commission
+          at no additional cost to you. This never influences our editorial reviews or
+          rankings. All opinions are our own. Promo codes are provided by our partners and
+          may expire or change without notice — verified at time of publishing.
+        </p>
+        <p class="footer-author">
+          <strong>Author &amp; Editorial Verification:</strong> Content reviewed and maintained
+          by the Workspacemodo editorial team. Last updated: October 2026.
+        </p>
+        <p class="footer-copy">© 2026 Workspacemodo. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====================================================
+       7. DEFERRED SCRIPTS
+       ==================================================== -->
+  <script src="/js/affiliate-beacon.js" defer></script>
+  <script src="/js/hotspots.js" defer></script>
+  <script src="/js/filter-engine.js" defer></script>
+  <script src="/js/leaderboard-deals.js" defer></script>
+</body>
+</html>
